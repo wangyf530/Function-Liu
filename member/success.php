@@ -9,7 +9,7 @@
     <h1>登入成功</h1>
 
 <?php
-include "../function.php";
+include "../function.php"; 
 $rows = all("member");
 
 
