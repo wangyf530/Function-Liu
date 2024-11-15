@@ -10,6 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>會員註冊</title>
     <style>
+        .draw{
+            width: fit-content;
+
+            margin:auto;
+        }
         h1{
             text-align: center;
         }
@@ -112,5 +117,16 @@
             <input type="reset" value="重置">
         </div>
     </form>
+
+    <div class="draw">
+        <?php
+        // ../是上一層
+        include("../function.php");
+        // starts($_GET['line']);
+        $line = isset($_GET['line'])?$_GET['line']:'7';
+        starts('菱形',$line);
+        
+        ?>
+        </div>
 </body>
 </html>

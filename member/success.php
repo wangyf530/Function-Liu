@@ -9,10 +9,14 @@
     <h1>登入成功</h1>
 
 <?php
-$dsn = "mysql:host=localhost; charset=utf8; dbname=crud";
-$pdo = new PDO($dsn, 'root', '');
+include "../function.php";
+$rows = all("member");
 
-$rows = $pdo -> query("SELECT * FROM `member`") -> fetchALL(PDO::FETCH_ASSOC);
+
+// $dsn = "mysql:host=localhost; charset=utf8; dbname=crud";
+// $pdo = new PDO($dsn, 'root', '');
+
+// $rows = $pdo -> query("SELECT * FROM `member`") -> fetchALL(PDO::FETCH_ASSOC);
 ?>
     
     <table>

@@ -11,23 +11,28 @@ if(!isset($_POST['acc'])){
 $acc=$_POST['acc'];
 $pw=$_POST['pw'];
 
-$sql = "SELECT * FROM `crud`.`member` WHERE `acc`= '$acc' && `pw` = '$pw'";
-// $sql = "SELECT count(id) FROM `member` WHERE `acc`= '$acc' && `pw` = '$pw'";
-
-
-echo $sql;
-
-$row = $pdo -> query($sql) -> fetch(PDO::FETCH_ASSOC);
+//first try
+//  $sql = "SELECT count(id) FROM `member` WHERE `acc`= '$acc' && `pw` = '$pw'";
 // $row = $pdo -> query($sql) -> fetchColumn();
 
+// second try
+// $sql = "SELECT * FROM `crud`.`member` WHERE `acc`= '$acc' && `pw` = '$pw'";
+// echo $sql;
+// $row = $pdo -> query($sql) -> fetch(PDO::FETCH_ASSOC);
+
+
+// third try 1115 簡寫
+include "../function.php";
+$row = find('member',[`acc`=> $acc,`pw` => '$pw']);
 
 echo "<pre>";
 print_r($row);
 echo "</pre>";
 
 
-if ($acc == $row['acc'] && $pw == $row['pw']){
+// if ($acc == $row['acc'] && $pw == $row['pw']){
 // if($row>=1){
+if(!empty($row)){
     // echo "輸入正確，登入成功";
     // $_SESSION['login']=$acc;
     // echo "<br> <a href='login.php'> <br> 回首頁</a>";
