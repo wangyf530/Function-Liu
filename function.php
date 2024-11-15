@@ -113,6 +113,7 @@
      * @return array
      */
     function find($table, $id) {
+        $sql = "SELECT * FROM $table WHERE ";
         $pdo = pdo('crud');
         if(is_array($id)){
             // 檢查帳號密碼
@@ -121,15 +122,74 @@
                 // sprintf(" `%s`='%s' ", $key, $value);
                 $tmp[] = "`$key` = '$value'";
             }
-            $sql = "SELECT * FROM $table WHERE ".join("&&", $tmp);
+            $sql = $sql.join("&&", $tmp);
         } else {
             // 拉取指定ID的資料
-            $sql = "SELECT * FROM $table WHERE `id` = $id";
+            $sql = $sql." `id` = $id";
         }
         $row = $pdo -> query($sql) -> fetch(PDO::FETCH_ASSOC);
         return $row;
     }
 
+    /**
+     * 更新指定條件的資料
+     * @param string $table 資料表名稱
+     * @param array $array 更新的欄位以及內容
+     * @param array/integer $id 條件(數字或陣列)
+     * @return boolean 
+     */
+    function update($table, $array, $id) {
+        $sql = "UPDATE $table SET ";
+        $pdo = pdo('crud');
+        // 要更新的東西
+        $tmp = [];
+        foreach ($array as $key => $value) {
+            // sprintf(" `%s`='%s' ", $key, $value);
+            $tmp[] = "`$key` = '$value'";
+        }
+        // set `acc`='acc', `pw`='pw'
+        $sql = $sql.join(",", $tmp);
+
+        // 如果給的id是字串
+        if(is_array($id)){
+            // 加上where的部分
+            $tmp = [];
+            foreach ($id as $key => $value) {
+                // sprintf(" `%s`='%s' ", $key, $value);
+                $tmp[] = "`$key` = '$value'";
+            }
+            $sql = $sql. " WHERE ".join("&&", $tmp);
+        } else {
+            // 加上where的部分
+            $sql = $sql." WHERE `id` = $id";
+        }
+        return $pdo -> exec($sql);
+    }
+
+    /**
+     * 新增資料
+     * @param string $table 資料表名稱
+     * @param string $cols 新增的欄位字串
+     * @param string $values 新增的數值字串
+     * @param array $array 
+     * @return boolean
+     */
+    // function insert($table, $cols, $values){
+    function insert($table, $array){
+        $pdo = pdo('crud');
+        $sql = "INSERT INTO $table ";
+        // $sql = $sql . $cols;
+        // $sql = $sql. "values ". $values;
+        $keys = array_keys($array);
+        $sql = $sql . "(`" . join("`,`",$keys) . "`) values ('" . joins("','",$array) . "')";
+
+        return $pdo -> exec($sql);
+    }
+
+    /**
+     * update 跟 insert 可以合併 -> save
+     * 差別在id 可以用 isset 區分開來
+     */
     
     /**
      * del()-給定條件後，會去刪除指定的資料
@@ -138,6 +198,7 @@
      * @return boolean 是否有刪除成功
      */
     function del($table, $id) {
+        $sql = "DELETE FROM $table WHERE ";
         $pdo = pdo('crud');
         if(is_array($id)){
             // 檢查帳號密碼
@@ -146,10 +207,10 @@
                 // sprintf(" `%s`='%s' ", $key, $value);
                 $tmp[] = "`$key` = '$value'";
             }
-            $sql = "DELETE FROM $table WHERE ".join("&&", $tmp);
+            $sql = $sql.join("&&", $tmp);
         } else {
             // 拉取指定ID的資料
-            $sql = "DELETE FROM $table WHERE `id` = $id";
+            $sql = $sql."`id` = $id";
         }
         // 返回TRUE如果成功刪除 FALSE如果刪除失敗
         return $pdo -> exec($sql);

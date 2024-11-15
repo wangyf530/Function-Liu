@@ -16,5 +16,6 @@ $pdo -> exec($sql); */
 $id = $_GET['id'];
 include "../function.php";
 del('member',$id);
+
 header("location:success.php");
 ?>
